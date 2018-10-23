@@ -74,7 +74,8 @@ class KNearestNeighbor(object):
         # training point, and store the result in dists[i, j]. You should   #
         # not use a loop over dimension.                                    #
         #####################################################################
-        dists[i, j] = np.absolute(X[i]-self.X_train[j]).sum();
+        dists[i, j] = np.square((X[i]-self.X_train[j])).sum(); 
+        #np.absolute(X[i]-self.X_train[j]).sum();
         #####################################################################
         #                       END OF YOUR CODE                            #
         #####################################################################
@@ -90,12 +91,16 @@ class KNearestNeighbor(object):
     num_test = X.shape[0]
     num_train = self.X_train.shape[0]
     dists = np.zeros((num_test, num_train))
+    print('num-test: ', num_test)
     for i in xrange(num_test):
       #######################################################################
       # TODO:                                                               #
       # Compute the l2 distance between the ith test point and all training #
       # points, and store the result in dists[i, :].                        #
       #######################################################################
+      #print('size = ', np.absolute(self.X_train - X[i]).sum(axis=1).size())
+      #print('size = ', np.absolute(self.X_train - X[i]).sum(axis=1)
+      #dists[i, :] = np.absolute(self.X_train - X[i]).sum(axis=1)
       pass
       #######################################################################
       #                         END OF YOUR CODE                            #
