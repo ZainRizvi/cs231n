@@ -1,7 +1,7 @@
 import numpy as np
 import operator
 from past.builtins import xrange
-
+from numpy import array
 
 class KNearestNeighbor(object):
   """ a kNN classifier with L2 distance """
@@ -92,15 +92,13 @@ class KNearestNeighbor(object):
     num_train = self.X_train.shape[0]
     dists = np.zeros((num_test, num_train))
     for i in xrange(num_test):
-      if i % 100 == 0:
-        print ('i = ', i)
       #######################################################################
       # TODO:                                                               #
       # Compute the l2 distance between the ith test point and all training #
       # points, and store the result in dists[i, :].                        #
       #######################################################################
       #print('size = ', len(np.square(self.X_train - X[i]).sum(axis=1)))
-      dists[i, :] = np.square(self.X_train - X[i]).sum(axis=1)
+      dists[i] = np.square(self.X_train - X[i]).sum(axis=1)
       #######################################################################
       #                         END OF YOUR CODE                            #
       #######################################################################
@@ -128,12 +126,7 @@ class KNearestNeighbor(object):
     #       and two broadcast sums.                                         #
     #########################################################################
     train_sq = np.sum(self.X_train**2, axis=1)
-    print ('train_sq shape old =', train_sq.shape)
-    train_sq = np.reshape(train_sq, (1, train_sq.shape[0]))
-    print ('train_sq shape new =', train_sq.shape)
-    test_sq = np.sum(X**2, axis=1)
-    test_sq = np.reshape(test_sq, (test_sq.shape[0], 1))
-    print ('test_sq shape =', test_sq.shape)
+    test_sq = np.transpose([np.sum(X**2, axis=1)])
     squares = train_sq + test_sq
     dists = squares - 2 * np.dot(X, np.transpose(self.X_train))
     #########################################################################
@@ -168,16 +161,8 @@ class KNearestNeighbor(object):
       # Hint: Look up the function numpy.argsort.                             #
       #########################################################################
       row = dists[i]
-      #k = 3
-      #print ('k = ', k)
-      #print ('Unsorted = ' , dists[i])
-      #print ('Argsorted = ', dists[i].argsort())
-      #print ('kth sorted = ', dists[i].argsort()[k])
-        
       index_array = row.argsort()[:k]
-      #print('index array = ', index_array)
       closest_y = self.y_train[index_array]
-      #print('closest_y', closest_y)
          
       
       #########################################################################
