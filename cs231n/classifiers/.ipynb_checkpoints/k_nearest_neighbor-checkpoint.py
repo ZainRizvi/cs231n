@@ -91,17 +91,16 @@ class KNearestNeighbor(object):
     num_test = X.shape[0]
     num_train = self.X_train.shape[0]
     dists = np.zeros((num_test, num_train))
-    print('num-test: ', num_test)
     for i in xrange(num_test):
+      if i % 100 == 0:
+        print ('i = ', i)
       #######################################################################
       # TODO:                                                               #
       # Compute the l2 distance between the ith test point and all training #
       # points, and store the result in dists[i, :].                        #
       #######################################################################
-      #print('size = ', np.absolute(self.X_train - X[i]).sum(axis=1).size())
-      #print('size = ', np.absolute(self.X_train - X[i]).sum(axis=1)
-      #dists[i, :] = np.absolute(self.X_train - X[i]).sum(axis=1)
-      pass
+      #print('size = ', len(np.square(self.X_train - X[i]).sum(axis=1)))
+      dists[i, :] = np.square(self.X_train - X[i]).sum(axis=1)
       #######################################################################
       #                         END OF YOUR CODE                            #
       #######################################################################
@@ -116,7 +115,6 @@ class KNearestNeighbor(object):
     """
     num_test = X.shape[0]
     num_train = self.X_train.shape[0]
-    dists = np.zeros((num_test, num_train)) 
     #########################################################################
     # TODO:                                                                 #
     # Compute the l2 distance between all test points and all training      #
@@ -129,7 +127,15 @@ class KNearestNeighbor(object):
     # HINT: Try to formulate the l2 distance using matrix multiplication    #
     #       and two broadcast sums.                                         #
     #########################################################################
-    pass
+    train_sq = np.sum(self.X_train**2, axis=1)
+    print ('train_sq shape old =', train_sq.shape)
+    train_sq = np.reshape(train_sq, (1, train_sq.shape[0]))
+    print ('train_sq shape new =', train_sq.shape)
+    test_sq = np.sum(X**2, axis=1)
+    test_sq = np.reshape(test_sq, (test_sq.shape[0], 1))
+    print ('test_sq shape =', test_sq.shape)
+    squares = train_sq + test_sq
+    dists = squares - 2 * np.dot(X, np.transpose(self.X_train))
     #########################################################################
     #                         END OF YOUR CODE                              #
     #########################################################################
